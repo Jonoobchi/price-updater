@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="utf-8">
+  <title>آپدیت قیمت محصولات</title>
+  <style>
+    body {direction: rtl; font-family: tahoma; max-width: 700px; margin: 20px auto;}
+    textarea, input {width: 100%; margin: 8px 0; padding: 8px;}
+  </style>
+</head>
+<body>
+  <h2>آپدیت قیمت‌ها</h2>
+  <input id="oldPrice" placeholder="قیمت قبلی درهم">
+  <input id="newPrice" placeholder="قیمت فعلی درهم">
+  <textarea id="products" rows="6" placeholder="لیست محصولات با قیمت به تومان"></textarea>
+  <button id="btn">محاسبه</button>
+  <h3>نتیجه:</h3>
+  <pre id="result"></pre>
+
+  <script>
+    document.getElementById('btn').addEventListener('click', async () => {
+      const oldPrice = document.getElementById('oldPrice').value;
+      const newPrice = document.getElementById('newPrice').value;
+      const products = document.getElementById('products').value;
+
+      const r = await fetch('/api/update-prices', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ oldPrice, newPrice, products })
+      });
+
+      const data = await r.json();
+      document.getElementById('result').innerText = data.output || data.error;
+    });
+  </script>
+</body>
+</html>
